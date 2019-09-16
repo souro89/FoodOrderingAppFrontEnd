@@ -1,0 +1,13 @@
+.app-header {
+  background-color: #253238;
+  height: 60px;
+  position: relative;
+}
+
+.app-logo {
+  color: white;
+  position: absolute;
+  top: 50%;
+  margin-left: 15px;
+  transform: translateY(-50%);
+}
