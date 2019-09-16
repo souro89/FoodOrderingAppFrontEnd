@@ -11,3 +11,20 @@
   margin-left: 15px;
   transform: translateY(-50%);
 }
+
+.input-box {
+  width: 300px;
+  margin: auto;
+  top: 50%;
+  transform: translateY(50%);
+}
+
+#search-box {
+  color: white;
+  width: 300px;
+}
+
+#search-box-icon {
+  color: white;
+  margin-bottom: 6px;
+}

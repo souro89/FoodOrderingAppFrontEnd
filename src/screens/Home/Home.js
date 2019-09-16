@@ -4,7 +4,7 @@ import Header from "../../common/Header";
 
 class Home extends Component {
   render() {
-    return <Header></Header>;
+    return <Header showSearchBar="true"></Header>;
   }
 }
 
