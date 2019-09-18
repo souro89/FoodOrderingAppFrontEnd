@@ -51,3 +51,21 @@
   margin-right: 5px;
   color: lightgray;
 }
+
+.display-none {
+  display: none;
+}
+
+.display-block {
+  display: block;
+  max-width: 200px;
+}
+
+.login-signup {
+  margin-bottom: 20px;
+}
+
+#modal-login-btn,
+#modal-signup-btn {
+  margin-top: 20px;
+}
