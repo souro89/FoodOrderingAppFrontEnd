@@ -28,3 +28,26 @@
   color: white;
   margin-bottom: 6px;
 }
+
+.login-1 {
+  float: right;
+  margin-right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.login-2 {
+  float: right;
+  margin-right: 16px;
+  top: 50%;
+  transform: translateY(35%);
+}
+
+#login-btn-icon {
+  margin-right: 5px;
+}
+
+#user-btn-icon {
+  margin-right: 5px;
+  color: lightgray;
+}
