@@ -118,6 +118,30 @@ class Header extends Component {
   };
 
   logoutOnClickHandler = () => {
+    let data = null;
+    let xhr = new XMLHttpRequest();
+    let that = this;
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        let responseText = JSON.parse(this.responseText);
+
+        console.log(responseText);
+
+        that.setState({
+          loggedIn: false
+        });
+      }
+    });
+
+    xhr.open("POST", "http://localhost:8080/api/customer/logout");
+    xhr.setRequestHeader(
+      "authorization",
+      "Bearer " + sessionStorage.getItem("access-token")
+    );
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(data);
+
     sessionStorage.removeItem("access-token");
     sessionStorage.removeItem("user-uuid");
     sessionStorage.removeItem("username");
@@ -210,7 +234,8 @@ class Header extends Component {
           });
           return;
         }
-        console.log(2);
+        console.log(xhr.getResponseHeader("access-token"));
+        console.log(xhr.getAllResponseHeaders());
         sessionStorage.setItem(
           "access-token",
           xhr.getResponseHeader("access-token")
@@ -235,6 +260,10 @@ class Header extends Component {
     );
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(data);
+  };
+
+  userMenuOnClickHandler = event => {
+    this.setState({ anchorEl: event.currentTarget });
   };
 
   render() {
@@ -284,14 +313,16 @@ class Header extends Component {
                 </Button>
               </div>
             ) : (
-              <div className={this.props.showSearchBar ? "login-2" : "login-1"}>
+              <div className={this.props.showSearchBar ? "login-1" : "login-2"}>
                 <Button
                   id="login-btn"
                   size="medium"
                   aria-owns={anchorEl ? "simple-menu" : undefined}
+                  aria-haspopup="true"
+                  onClick={this.userMenuOnClickHandler}
                 >
                   <AccountCircleIcon id="user-btn-icon"></AccountCircleIcon>
-                  {sessionStorage.getItem("username")}
+                  {sessionStorage.getItem("first-name")}
                 </Button>
                 <Menu
                   id="user-menu"
@@ -299,10 +330,11 @@ class Header extends Component {
                   open={Boolean(anchorEl)}
                   onClose={this.userMenuOnCloseHandler}
                 >
-                  <MenuItem onCLick={this.myProfileClickHandler}>
-                    <Link to="/profile" style={{ decoration: "none" }}>
+                  <MenuItem onClick={this.myProfileClickHandler}>
+                    {/* <Link to="/profile" style={{ textDecoration: "none" }}>
                       My Profile
-                    </Link>
+                    </Link> */}
+                    My Profile
                   </MenuItem>
                   <MenuItem onClick={this.logoutOnClickHandler}>
                     Logout

@@ -47,6 +47,10 @@
   margin-right: 5px;
 }
 
+#login-btn {
+  color: lightgray;
+}
+
 #user-btn-icon {
   margin-right: 5px;
   color: lightgray;
