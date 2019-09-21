@@ -500,10 +500,9 @@ class Header extends Component {
                   onClose={this.userMenuOnCloseHandler}
                 >
                   <MenuItem onClick={this.myProfileClickHandler}>
-                    {/* <Link to="/profile" style={{ textDecoration: "none" }}>
+                    <Link to="/profile" style={{ textDecoration: "none" }}>
                       My Profile
-                    </Link> */}
-                    My Profile
+                    </Link>
                   </MenuItem>
                   <MenuItem onClick={this.logoutOnClickHandler}>
                     Logout
