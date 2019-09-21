@@ -168,6 +168,26 @@ class Header extends Component {
     this.setState({ loginPassword: e.target.value });
   };
 
+  inputFirstNameChangeHandler = e => {
+    this.setState({ firstName: e.target.value });
+  };
+
+  inputLastNameChangeHandler = e => {
+    this.setState({ lastName: e.target.value });
+  };
+
+  inputEmailChangeHandler = e => {
+    this.setState({ email: e.target.value });
+  };
+
+  inputSignupPasswordChangeHandler = e => {
+    this.setState({ signupPassword: e.target.value });
+  };
+
+  inputSignupContactNoChangeHandler = e => {
+    this.setState({ signupContactNo: e.target.value });
+  };
+
   loginClickHandler = e => {
     console.log(this.state.loginContactNo === "");
     let contactNo = false;
@@ -264,6 +284,137 @@ class Header extends Component {
 
   userMenuOnClickHandler = event => {
     this.setState({ anchorEl: event.currentTarget });
+  };
+
+  signupClickHandler = e => {
+    let setFirstName = false;
+    if (this.state.firstName === "") {
+      this.setState({
+        firstNameRequried: "display-block"
+      });
+      setFirstName = true;
+    } else {
+      this.setState({
+        firstNameRequried: "display-none"
+      });
+      setFirstName = false;
+    }
+    let setEmail = false;
+    if (this.state.email === "") {
+      this.setState({
+        emailRequried: "display-block",
+        emailRequiredMsg: "Required"
+      });
+      setEmail = true;
+    } else {
+      this.setState({
+        emailRequried: "display-none"
+      });
+      setEmail = false;
+    }
+    let setPassword = false;
+    if (this.state.signupPassword === "") {
+      this.setState({
+        signupPasswordRequired: "display-block",
+        signupPasswordRequiredMsg: "Required"
+      });
+      setPassword = true;
+    } else {
+      this.setState({
+        signupPasswordRequired: "display-none"
+      });
+      setPassword = false;
+    }
+    let setContactNo = false;
+    if (this.state.signupContactNo === "") {
+      this.setState({
+        signupContactNoRequired: "display-block",
+        signupContactNoRequiredMsg: "Required"
+      });
+      setContactNo = true;
+    } else {
+      this.setState({
+        signupContactNoRequired: "display-none"
+      });
+      setContactNo = false;
+    }
+
+    let regEmail = new RegExp(
+      "^[a-zA-Z0-9_+&*-]+(?:.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+.)+[a-zA-Z]{2,7}"
+    );
+    if (setEmail === false && regEmail.test(this.state.email) === false) {
+      this.setState({
+        emailRequired: "display-block",
+        emailRequiredMsg: "Invalid Email"
+      });
+      return;
+    }
+
+    let regPassword = new RegExp(
+      "^(?=.*?[A-Z])(?=.*?[0-9])(?=.*?[#@$%&*!^-]).{8,}$"
+    );
+    if (
+      setPassword === false &&
+      regPassword.test(this.state.signupPassword) === false
+    ) {
+      this.setState({
+        signupPasswordRequired: "display-block",
+        signupPasswordRequiredMsg:
+          "Password must contain at least one capital letter, one small letter, one number, and one special character"
+      });
+      return;
+    }
+
+    let regContactNo = new RegExp("[0-9]+");
+    if (
+      setContactNo === false &&
+      (regContactNo.test(this.state.signupContactNo) === false ||
+        this.state.signupContactNo.length !== 10)
+    ) {
+      this.setState({
+        signupContactNoRequired: "display-block",
+        signupContactNoRequiredMsg:
+          "Contact No. must contain only numbers and must be 10 digits long"
+      });
+      return;
+    }
+
+    if (setFirstName || setEmail || setPassword || setContactNo) {
+      return;
+    }
+
+    let signupData = {
+      first_name: this.state.firstName,
+      last_name: this.state.lastName,
+      email_address: this.state.email,
+      password: this.state.signupPassword,
+      contact_number: this.state.signupContactNo
+    };
+
+    let xhr = new XMLHttpRequest();
+    let that = this;
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        let responseText = JSON.parse(this.responseText);
+      }
+
+      if (this.responseText.code === "SGR-001") {
+        that.setState({
+          signupContactNoRequired: "display-block",
+          signupContactNoRequiredMsg: this.responseText.message
+        });
+        return;
+      }
+
+      that.setState({
+        value: 0,
+        openSignupSuccessMsg: true
+      });
+    });
+
+    xhr.open("POST", "http://localhost:8080/api/customer/signup");
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.send(JSON.stringify(signupData));
   };
 
   render() {
@@ -407,6 +558,109 @@ class Header extends Component {
                 onClick={this.loginClickHandler}
               >
                 LOGIN
+              </Button>
+            </TabContainer>
+          )}
+
+          {this.state.value === 1 && (
+            <TabContainer>
+              <FormControl required>
+                <InputLabel htmlFor="firstName">First Name</InputLabel>
+                <Input
+                  id="firstName"
+                  type="text"
+                  firstName={this.state.firstName}
+                  value={this.state.firstName}
+                  onChange={this.inputFirstNameChangeHandler}
+                ></Input>
+                <FormHelperText
+                  className={this.state.firstNameRequried}
+                  error={true}
+                >
+                  <span>Required</span>
+                </FormHelperText>
+              </FormControl>
+              <br />
+              <br />
+              <FormControl>
+                <InputLabel htmlFor="lastName">Last Name</InputLabel>
+                <Input
+                  id="lastName"
+                  type="text"
+                  firstName={this.state.lastName}
+                  value={this.state.lastName}
+                  onChange={this.inputLastNameChangeHandler}
+                ></Input>
+              </FormControl>
+              <br />
+              <br />
+              <FormControl required>
+                <InputLabel htmlFor="email">Email</InputLabel>
+                <Input
+                  id="email"
+                  type="text"
+                  firstName={this.state.email}
+                  value={this.state.email}
+                  onChange={this.inputEmailChangeHandler}
+                ></Input>
+                <FormHelperText
+                  className={this.state.emailRequired}
+                  error={true}
+                >
+                  <span>{this.state.emailRequiredMsg}</span>
+                </FormHelperText>
+              </FormControl>
+              <br />
+              <br />
+              <FormControl required>
+                <InputLabel htmlFor="signupPassword">Password</InputLabel>
+                <Input
+                  id="password"
+                  type="password"
+                  firstName={this.state.signupPassword}
+                  value={this.state.signupPassword}
+                  onChange={this.inputSignupPasswordChangeHandler}
+                ></Input>
+                <FormHelperText
+                  className={this.state.signupPasswordRequired}
+                  error={true}
+                >
+                  <span>{this.state.signupPasswordRequiredMsg}</span>
+                </FormHelperText>
+                <br />
+                <br />
+              </FormControl>
+              <br />
+              <br />
+
+              <FormControl required>
+                <InputLabel htmlFor="signupContactNo">Contact No</InputLabel>
+                <Input
+                  id="signupContactNo"
+                  type="text"
+                  firstName={this.state.signupContactNo}
+                  value={this.state.signupContactNo}
+                  onChange={this.inputSignupContactNoChangeHandler}
+                ></Input>
+                <FormHelperText
+                  className={this.state.signupPasswordRequired}
+                  error={true}
+                >
+                  <span>{this.state.signupPasswordRequiredMsg}</span>
+                </FormHelperText>
+                <br />
+                <br />
+              </FormControl>
+              <br />
+              <br />
+
+              <Button
+                id="modal-signup-btn"
+                variant="contained"
+                color="primary"
+                onClick={this.signupClickHandler}
+              >
+                Sign Up
               </Button>
             </TabContainer>
           )}
