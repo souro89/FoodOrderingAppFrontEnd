@@ -12,7 +12,8 @@ import {
   FormControl,
   InputLabel,
   FormHelperText,
-  Typography
+  Typography,
+  Snackbar
 } from "@material-ui/core";
 import Modal from "react-modal";
 import { withStyles } from "@material-ui/core/styles";
@@ -395,26 +396,43 @@ class Header extends Component {
     let that = this;
     xhr.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
-        let responseText = JSON.parse(this.responseText);
-      }
+        let respText = JSON.parse(this.responseText);
 
-      if (this.responseText.code === "SGR-001") {
+        console.log(respText);
+        if (respText.code === "SGR-001") {
+          that.setState({
+            signupContactNoRequired: "display-block",
+            signupContactNoRequiredMsg: respText.message
+          });
+          return;
+        }
+
         that.setState({
-          signupContactNoRequired: "display-block",
-          signupContactNoRequiredMsg: this.responseText.message
+          value: 0,
+          openSignupSuccessMsg: true
         });
-        return;
       }
-
-      that.setState({
-        value: 0,
-        openSignupSuccessMsg: true
-      });
     });
 
     xhr.open("POST", "http://localhost:8080/api/customer/signup");
     xhr.setRequestHeader("Content-Type", "application/json");
     xhr.send(JSON.stringify(signupData));
+  };
+
+  loginSuccessOnCloseHandler = (e, r) => {
+    if (r === "clickaway") {
+      return;
+    }
+    this.setState({ openLoginSuccessMsg: false });
+  };
+
+  signupMsgOnCloseHandler;
+
+  signupMsgOnCloseHandler = (e, r) => {
+    if (r === "clickaway") {
+      return;
+    }
+    this.setState({ openSignupSuccessMsg: false });
   };
 
   render() {
@@ -569,7 +587,7 @@ class Header extends Component {
                 <Input
                   id="firstName"
                   type="text"
-                  firstName={this.state.firstName}
+                  firstname={this.state.firstName}
                   value={this.state.firstName}
                   onChange={this.inputFirstNameChangeHandler}
                 ></Input>
@@ -587,7 +605,7 @@ class Header extends Component {
                 <Input
                   id="lastName"
                   type="text"
-                  firstName={this.state.lastName}
+                  lastname={this.state.lastName}
                   value={this.state.lastName}
                   onChange={this.inputLastNameChangeHandler}
                 ></Input>
@@ -599,7 +617,7 @@ class Header extends Component {
                 <Input
                   id="email"
                   type="text"
-                  firstName={this.state.email}
+                  email={this.state.email}
                   value={this.state.email}
                   onChange={this.inputEmailChangeHandler}
                 ></Input>
@@ -617,7 +635,7 @@ class Header extends Component {
                 <Input
                   id="password"
                   type="password"
-                  firstName={this.state.signupPassword}
+                  password={this.state.signupPassword}
                   value={this.state.signupPassword}
                   onChange={this.inputSignupPasswordChangeHandler}
                 ></Input>
@@ -638,15 +656,15 @@ class Header extends Component {
                 <Input
                   id="signupContactNo"
                   type="text"
-                  firstName={this.state.signupContactNo}
+                  contactno={this.state.signupContactNo}
                   value={this.state.signupContactNo}
                   onChange={this.inputSignupContactNoChangeHandler}
                 ></Input>
                 <FormHelperText
-                  className={this.state.signupPasswordRequired}
+                  className={this.state.signupContactNoRequired}
                   error={true}
                 >
-                  <span>{this.state.signupPasswordRequiredMsg}</span>
+                  <span>{this.state.signupContactNoRequiredMsg}</span>
                 </FormHelperText>
                 <br />
                 <br />
@@ -665,6 +683,38 @@ class Header extends Component {
             </TabContainer>
           )}
         </Modal>
+
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={this.state.openLoginSuccessMsg}
+          autoHideDuration={4000}
+          onClose={this.loginSuccessOnCloseHandler}
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          message={<span id="message-id">Logged in successfully!</span>}
+        ></Snackbar>
+
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left"
+          }}
+          open={this.state.openSignupSuccessMsg}
+          autoHideDuration={4000}
+          onClose={this.signupMsgOnCloseHandler}
+          ContentProps={{
+            "aria-describedby": "message-id"
+          }}
+          message={
+            <span id="message-id">
+              Registered successfully! Please login now!
+            </span>
+          }
+        />
       </div>
     );
   }
