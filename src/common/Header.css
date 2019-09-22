@@ -73,3 +73,29 @@
 #modal-signup-btn {
   margin-top: 20px;
 }
+
+@media screen and (max-width: 800px) {
+  .app-header {
+    display: block;
+    height: auto;
+    padding-bottom: 16px;
+  }
+
+  #fastfood-icon {
+    margin: 13px 0 0 16px;
+    position: unset;
+    transform: none;
+  }
+
+  .search-box {
+    margin: 16px 0 0 16px;
+    transform: none;
+  }
+
+  .login-1,
+  .login-2 {
+    float: none;
+    margin: 16px 0 0 16px;
+    transform: none;
+  }
+}
