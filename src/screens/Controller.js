@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Home from "./Home/Home";
 import Profile from "./Profile/profile";
+import Details from "./Details/details";
 
 class Controller extends Component {
   constructor() {
@@ -21,6 +22,17 @@ class Controller extends Component {
                 {" "}
                 }/
               </Home>
+            )}
+          ></Route>
+
+          <Route
+            exact
+            path="/retaurant/:id"
+            render={props => (
+              <Details {...props} baseURL={this.baseURL}>
+                {" "}
+                }/
+              </Details>
             )}
           ></Route>
 
