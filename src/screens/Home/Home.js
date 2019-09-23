@@ -106,7 +106,7 @@ class Home extends Component {
   }
 
   restaurantOnClick = e => {
-    return;
+    this.props.history.push("/restaurant/" + e);
   };
 
   updateCardsGridlistCols = e => {

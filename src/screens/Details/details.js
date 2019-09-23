@@ -1,9 +1,18 @@
 import React, { Component } from "react";
-import "./profile.css";
+import "./details.css";
+import Header from "../../common/Header";
 
 class Details extends Component {
+  constructor() {
+    super();
+  }
+
   render() {
-    return <div>My Details</div>;
+    return (
+      <div>
+        <Header></Header>
+      </div>
+    );
   }
 }
 

@@ -26,8 +26,7 @@ class Controller extends Component {
           ></Route>
 
           <Route
-            exact
-            path="/retaurant/:id"
+            path="/restaurant/:id"
             render={props => (
               <Details {...props} baseURL={this.baseURL}>
                 {" "}
@@ -37,7 +36,6 @@ class Controller extends Component {
           ></Route>
 
           <Route
-            exact
             path="/profile"
             render={props => (
               <Profile {...props} baseURL={this.baseURL}>
