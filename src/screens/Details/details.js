@@ -41,6 +41,23 @@ class Details extends Component {
     xhr.send(data);
   }
 
+  getCategory = () => {
+    let categories = this.state.restaurantDetails.categories;
+
+    if (categories.length <= 0) {
+      return;
+    }
+    console.log(categories[0].category_name);
+    return categories.map((item, index) => {
+      return (
+        <span key={index}>
+          {item.category_name}
+          {categories.length === index + 1 ? " " : ", "}
+        </span>
+      );
+    });
+  };
+
   render() {
     return (
       <div>
@@ -48,7 +65,7 @@ class Details extends Component {
         <div>
           <Grid
             container
-            spacing={22}
+            spacing={24}
             className="backGroundGrey mobile-text-center"
           >
             <Grid item xs={12} sm={3} className="text-center">
@@ -59,6 +76,15 @@ class Details extends Component {
                 height="250"
                 className="m-t-20"
               ></img>
+            </Grid>
+            <Grid item xs={12} sm={9}>
+              <Grid container spacing={24}>
+                <Grid item sm={12} xs={12} className="serif">
+                  <h1>{this.state.restaurantDetails.restaurant_name}</h1>
+                  <h3>{this.state.restaurantDetails.address.locality}</h3>
+                  <h3>{this.getCategory()}</h3>
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
         </div>
