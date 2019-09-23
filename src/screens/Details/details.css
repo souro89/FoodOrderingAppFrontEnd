@@ -1,0 +1,17 @@
+.backGroundGrey {
+  background-color: #e7e7e7;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.m-t-20 {
+  margin-top: 20px;
+}
+
+@media only screen and (max-width: 600px) {
+  .mobile-text-center {
+    text-align: center;
+  }
+}
