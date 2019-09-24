@@ -14,6 +14,78 @@
   font-family: serif;
 }
 
+.divcustomerRating {
+  flex-direction: column;
+  flex: 50;
+}
+
+.text-style {
+  color: #808080;
+}
+
+.items {
+  padding: 2rem 4rem;
+}
+
+.mt-15 {
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+.m-10 {
+  margin: 10px 0 !important;
+}
+
+.flex {
+  display: flex;
+}
+.flex-50 {
+  flex: 50;
+}
+.flex-75 {
+  flex: 75;
+  text-transform: capitalize;
+}
+.flex-10 {
+  flex: 10;
+}
+.flex-5 {
+  flex: 5;
+}
+
+.pd-1-per {
+  padding: 1%;
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
+
+.my-cart {
+  margin-left: 20px;
+  font-weight: 700;
+}
+
+.right {
+  float: right;
+}
+
+.mr-8 {
+  margin-right: 8px;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.mt-24-px {
+  margin-top: 24px !important;
+}
+
 @media only screen and (max-width: 600px) {
   .mobile-text-center {
     text-align: center;
