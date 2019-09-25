@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import "./profile.css";
+import "./checkout.css";
 
 class Checkout extends Component {
   render() {

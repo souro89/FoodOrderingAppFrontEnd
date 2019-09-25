@@ -252,6 +252,28 @@ class Details extends Component {
     this.setState({ open: false, snackBarText: "" });
   };
 
+  checkoutCartHandler = e => {
+    if (this.state.cartItems && this.state.cartItems.length === 0) {
+      this.setState({ open: true, snackBarText: "CHECKOUT" });
+      return;
+    }
+
+    if (sessionStorage.getItem("access-token") === null) {
+      this.setState({ open: true, snackBarText: "LOGIN" });
+      return;
+    }
+
+    let customerCart = {
+      restaurantDetails: this.state.restaurantDetails,
+      cartItems: this.state.cartItems,
+      totalPrice: this.state.totalAmount
+    };
+
+    sessionStorage.setItem("customer-cart", JSON.stringify(customerCart));
+
+    this.props.history.push("/checkout");
+  };
+
   render() {
     return (
       <div>
@@ -333,6 +355,7 @@ class Details extends Component {
                     fullWidth
                     size="medium"
                     color="primary"
+                    onClick={this.checkoutCartHandler}
                   >
                     CHECKOUT
                   </Button>

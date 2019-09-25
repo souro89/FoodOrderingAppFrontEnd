@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Redirect } from "react-router-dom";
 import Home from "./Home/Home";
 import Profile from "./Profile/profile";
 import Details from "./Details/details";
+import Checkout from "./Checkout/checkout";
 
 class Controller extends Component {
   constructor() {
@@ -43,6 +44,17 @@ class Controller extends Component {
                 }/
               </Profile>
             )}
+          ></Route>
+
+          <Route
+            path="/checkout"
+            render={props =>
+              sessionStorage.getItem("customer-cart") === null ? (
+                <Redirect to="/"></Redirect>
+              ) : (
+                <Checkout {...props} baseURL={this.baseURL}></Checkout>
+              )
+            }
           ></Route>
         </div>
       </Router>
