@@ -46,6 +46,30 @@
   flex: 75;
   text-transform: capitalize;
 }
+
+.black-color {
+  color: black;
+}
+
+.btn-hover {
+}
+
+.btn-hover:hover {
+  background-color: yellow !important;
+}
+
+.plus-btn {
+  font-size: 24px;
+  line-height: 18px;
+  font-weight: 700;
+  color: #757575;
+  cursor: pointer;
+}
+
+.capital {
+  text-transform: capitalize;
+}
+
 .flex-10 {
   flex: 10;
 }
@@ -74,6 +98,19 @@
   float: right;
 }
 
+.checkout-grey-color {
+  color: #7f7f7f;
+}
+
+.minus-icon {
+  font-size: 24px;
+  width: 1em;
+  height: 1em;
+  line-height: 1em;
+  font-weight: 700;
+  color: black;
+}
+
 .mr-8 {
   margin-right: 8px;
 }
@@ -84,6 +121,25 @@
 
 .mt-24-px {
   margin-top: 24px !important;
+}
+
+.width-40 {
+  width: 40%;
+}
+.width-45 {
+  width: 45%;
+}
+.width-10 {
+  width: 10%;
+}
+.width-2-5 {
+  width: 2.5%;
+}
+.width-5 {
+  width: 5%;
+}
+.width-100 {
+  width: 100%;
 }
 
 @media only screen and (max-width: 600px) {

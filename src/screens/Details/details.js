@@ -9,9 +9,11 @@ import {
   CardContent,
   Typography,
   Badge,
-  Button
+  Button,
+  Snackbar
 } from "@material-ui/core";
 import AddIcon from "@material-ui/icons/Add";
+import CloseIcon from "@material-ui/icons/Close";
 import ShoppingCart from "@material-ui/icons/ShoppingCart";
 
 class Details extends Component {
@@ -63,7 +65,6 @@ class Details extends Component {
     if (categories.length <= 0) {
       return;
     }
-    console.log(categories[0].category_name);
     return categories.map((item, index) => {
       return (
         <span key={index}>
@@ -95,7 +96,6 @@ class Details extends Component {
   getEachMenuItem = (item_list, category_name) => {
     return item_list.map((item, index) => {
       item = { item, category_name: category_name };
-      console.log(item.item);
       return (
         <div className="flex pd-1-per" key={index}>
           <div className="flex-5">
@@ -115,7 +115,7 @@ class Details extends Component {
             <IconButton
               aria-label="Add"
               style={{ padding: "1px" }}
-              onClick={() => this.addCheckoutList(item, "+")}
+              onClick={this.addCheckoutList(item.item, "+")}
             >
               <AddIcon />
             </IconButton>
@@ -125,12 +125,12 @@ class Details extends Component {
     });
   };
 
-  addCheckoutList = (i, m) => {
+  addCheckoutList = (i, m) => event => {
     let currentSelection, newcartItems;
     let alreadyPresent = this.state.cartItems.filter(
       c => i.item_name === c.item_name && i.category_name === c.category_name
     );
-    if (alreadyPresent > 0) {
+    if (alreadyPresent.length > 0) {
       currentSelection = this.state.cartItems.map(item => {
         if (
           item.id === alreadyPresent[0].id &&
@@ -162,6 +162,94 @@ class Details extends Component {
       noOfItemsCart: noOfItemsCart,
       totalAmount: totalAmount
     });
+  };
+
+  getCartCheckoutList = cartItems => {
+    return cartItems.map((item, index) => {
+      return (
+        <div className="flex width-100 pd-1-per" key={index}>
+          <div className="width-5">
+            <i
+              className={
+                item.item_type === "NON_VEG"
+                  ? "fa fa-stop-circle-o red"
+                  : "fa fa-stop-circle-o green"
+              }
+            ></i>
+          </div>
+          <div className="width-40 capital checkout-grey-color">
+            {item.item_name}
+          </div>
+          <div className="width-40">
+            <IconButton
+              aria-label="AddIcon"
+              className="btn-hover"
+              style={{ padding: "1px" }}
+              onClick={this.removeMenuClick(item)}
+            >
+              <div className="minus-icon"> - </div>
+            </IconButton>
+            {item.count}
+            <IconButton
+              aria-label="Add"
+              className="btn-hover"
+              style={{ padding: "1px" }}
+              onClick={this.addCheckoutList(item, "+")}
+            >
+              <AddIcon className="black-color" />
+            </IconButton>
+          </div>
+          <div className="width-2-5 checkout-grey-color">
+            <i className="fa fa-inr"></i>
+          </div>
+          <div className="checkout-grey-color"> {item.totalItemPrice}.00</div>
+        </div>
+      );
+    });
+  };
+
+  removeMenuClick = item => event => {
+    const itemLength = this.state.noOfItemsCart - 1;
+    if (item.count === 1) {
+      let newArr = [...this.state.cartItems];
+      newArr.forEach((data, index) => {
+        if (item.id === data.id && item.category_name === data.category_name) {
+          newArr.splice(index, 1);
+        }
+      });
+      const totalPrice = this.state.totalAmount - item.price;
+      this.setState({
+        cartItems: newArr,
+        totalAmount: totalPrice,
+        open: true,
+        snackBarText: "--",
+        noOfItemsCart: itemLength
+      });
+    } else {
+      let newArr = [...this.state.cartItems];
+      newArr.forEach((data, index) => {
+        if (item.id === data.id && item.category_name === data.category_name) {
+          newArr[index].count = data.count - 1;
+          newArr[index].totalItemPrice = data.totalItemPrice - data.price;
+        }
+      });
+      const totalPrice = this.state.totalAmount - item.price;
+      this.setState({
+        cartItems: newArr,
+        totalAmount: totalPrice,
+        open: true,
+        snackBarText: "-",
+        noOfItemsCart: itemLength
+      });
+    }
+  };
+
+  handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    this.setState({ open: false, snackBarText: "" });
   };
 
   render() {
@@ -232,7 +320,7 @@ class Details extends Component {
                     <span className="my-cart">My Cart</span>
                   </Typography>
 
-                  {}
+                  {this.getCartCheckoutList(this.state.cartItems)}
                   <div className="bold pd-1-per">
                     TOTAL AMOUNT{" "}
                     <span className="right mr-8">
@@ -252,6 +340,45 @@ class Details extends Component {
               </Card>
             </Grid>
           </Grid>
+          <Snackbar
+            anchorOrigin={{
+              vertical: "bottom",
+              horizontal: "left"
+            }}
+            open={this.state.open}
+            autoHideDuration={4000}
+            onClose={this.handleClose}
+            ContentProps={{
+              "aria-describedby": "message-id"
+            }}
+            message={
+              <span id="message-id">
+                {this.state.snackBarText === "CHECKOUT"
+                  ? "Please add an item to your cart!"
+                  : this.state.snackBarText === "LOGIN"
+                  ? "Please login first!"
+                  : this.state.snackBarText === "ADD"
+                  ? "Item added to cart!"
+                  : this.state.snackBarText === "+"
+                  ? "Item quantity increased by 1!"
+                  : this.state.snackBarText === "--"
+                  ? "Item removed from cart!"
+                  : this.state.snackBarText === "-"
+                  ? "Item quantity decreased by 1!"
+                  : ""}
+              </span>
+            }
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="inherit"
+                onClick={this.handleClose}
+              >
+                <CloseIcon />
+              </IconButton>
+            ]}
+          ></Snackbar>
         </div>
       </div>
     );
